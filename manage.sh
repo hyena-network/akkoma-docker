@@ -373,7 +373,6 @@ fi
 require_file ".env" ".env.dist"
 # No longer required
 #require_file "config.exs" "config.dist.exs"
-require_file "config.docker.exs"
 throw_file_errors
 
 # Parse .env
