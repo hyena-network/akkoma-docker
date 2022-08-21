@@ -40,6 +40,12 @@ The only command that you cannot use is `docker-compose build` due to build cach
 `.env` stores config values that need to be known at orchestration/build time as well as configuration values most commonly put in the `config.exs`.<br/>
 All additional options that you usually put into your `*.secret.exs` now go into `config.d/config.exs`, this will be created on first run with a header.<br/>
 
+Incase you mainly want to configure through the `admin-fe` add the following line to your `config.d/config.exs`:
+```
+config :pleroma, configurable_from_database: true
+```
+
+
 Documentation for the possible values, please refer to the Pleroma (since Akkoma does not have it yet at this time) configuration cheatsheet
  [[link]](https://docs-develop.pleroma.social/backend/configuration/cheatsheet/)
 
