@@ -45,8 +45,8 @@ services:
     ]
     volumes:
       - ./custom.d:/custom.d:ro
-      - ./config.docker.exs:/home/akkoma/akkoma/config/prod.secret.exs:ro
-      - ./config.docker.exs:/home/akkoma/akkoma/config/dev.secret.exs:ro
+      - ./docker/config.docker.exs:/home/akkoma/akkoma/config/prod.secret.exs:ro
+      - ./docker/config.docker.exs:/home/akkoma/akkoma/config/dev.secret.exs:ro
       - ./emoji:/home/akkoma/akkoma/instance/static/emoji
       - ./config.d:/config.d
       - $DOCKER_DATADIR/akkoma/uploads:/uploads
