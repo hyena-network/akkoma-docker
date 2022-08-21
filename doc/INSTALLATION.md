@@ -27,7 +27,7 @@ For other problems related to this script, contact me or open an issue :)
 After which you might want to make yourself an admin user as following:
 
 ```
-./manage.sh mix pleroma.user add <username> <email> --admin
+./manage.sh mix pleroma.user new <username> <email> --admin
 ```
 
 Hint:
