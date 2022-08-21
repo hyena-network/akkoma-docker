@@ -1,8 +1,10 @@
-# Pleroma-Docker (Unofficial)
+# Akkoma-Docker (Unofficial)
 
-[Pleroma](https://pleroma.social/) is a selfhosted social network that uses ActivityPub.
+[Akkoma](https://akkoma.dev/) (A Pleroma fork) is a selfhosted social network that uses ActivityPub.
 
 This repository dockerizes it for easier deployment.
+
+This repository was heavily based on sn0w's work on [pleroma-docker](https://memleak.eu/sn0w/pleroma-docker)
 
 <hr>
 
@@ -23,18 +25,7 @@ This repository dockerizes it for easier deployment.
 
 <hr>
 
-## In the Wild
 
-`cofe.rocks` is always managed by this script.<br/>
-Take a look at [hosted/pleroma](/hosted/pleroma) if you get stuck or need some inspiration.
-
-Additionally it's known to run on (in no particular order):
-- social.interhop.org
-- social.technodruide.ca
-- is.badat.dev
-
-Does your instance use pleroma-docker?<br/>
-Let me know and I'll add you to this list.
 
 ## Docs
 
@@ -76,6 +67,23 @@ Documentation for the possible values is inside of that file.
 
 Run `./manage.sh build` again and start the updated image with `./manage.sh up`.<br/>
 You don't need to stop your pleroma server for either of those commands.
+
+### Frontends
+
+To install alternative frontends other than the standard installed `pleroma-fe` and `admin-fe`.
+First, uncomment the following volume line in `docker-compose.yml` like:
+```
+- $DOCKER_DATADIR/frontends:/home/akkoma/akkoma/instance/static/frontends
+```
+Then, use the `manage.sh` script to install them like this example:
+
+```
+./manage.sh mix pleroma.frontend install pleroma-fe
+./manage.sh mix pleroma.frontend install admin-fe
+./manage.sh mix pleroma.frontend install masto-fe
+./manage.sh restart
+```
+From there on you should find a folder called `frontends` in your Docker data directory where you can see the installed frontends. 
 
 ### Maintenance
 

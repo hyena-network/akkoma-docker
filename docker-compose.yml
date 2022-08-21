@@ -48,3 +48,5 @@ services:
       - ./config.exs:/home/akkoma/akkoma/config/dev.secret.exs:ro
       - ./emoji:/home/akkoma/akkoma/instance/static/emoji
       - $DOCKER_DATADIR/uploads:/uploads
+      # Uncomment for custom frontends
+      #- $DOCKER_DATADIR/frontends:/home/akkoma/akkoma/instance/static/frontends

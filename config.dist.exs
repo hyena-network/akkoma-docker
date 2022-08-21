@@ -117,3 +117,14 @@ config :pleroma, Pleroma.Web.Endpoint,
 #  storage_url: "https://swift-endpoint.prodider.com/v1/AUTH_<tenant>/<container>",
 #  object_url: "https://cdn-endpoint.provider.com/<container>"
 #
+
+# Configure Akkoma Frontends
+config :pleroma, :frontends,
+  primary: %{
+    "name" => "pleroma-fe",
+    "ref" => "stable"
+  },
+  admin: %{
+    "name" => "admin-fe",
+    "ref" => "stable"
+  }

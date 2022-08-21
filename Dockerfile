@@ -98,7 +98,12 @@ RUN \
 # Precompile
 RUN \
     cp ./config/dev.exs ./config/prod.secret.exs && \
-    BUILDTIME=1 /entrypoint.sh && \
+    BUILDTIME=1 /entrypoint.sh
+
+# Install default frontends
+RUN \
+    mix pleroma.frontend install pleroma-fe && \
+    mix pleroma.frontend install admin-fe && \
     rm ./config/prod.secret.exs
 
 # Register healthcheck
