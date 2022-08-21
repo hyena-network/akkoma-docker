@@ -50,7 +50,7 @@ For other problems related to this script, contact me or open an issue :)
 
 - ~1GB of free HDD space
 - `git` if you want smart build caches
-- `curl`, `jq`, and `dialog` if you want to use `./pleroma.sh mod`
+- `curl`, `jq`, and `dialog` if you want to use `./manage.sh mod`
 - Bash 4+
 - Docker 18.06+ and docker-compose 1.22+
 
@@ -58,7 +58,7 @@ For other problems related to this script, contact me or open an issue :)
 
 - Clone this repository
 - Create a `config.exs` and `.env` file
-- Run `./pleroma.sh build` and `./pleroma.sh up`
+- Run `./manage.sh build` and `./manage.sh up`
 - [Configure a reverse-proxy](#my-instance-is-up-how-do-i-reach-it)
 - Profit!
 
@@ -74,15 +74,15 @@ Documentation for the possible values is inside of that file.
 
 ### Updates
 
-Run `./pleroma.sh build` again and start the updated image with `./pleroma.sh up`.<br/>
+Run `./manage.sh build` again and start the updated image with `./manage.sh up`.<br/>
 You don't need to stop your pleroma server for either of those commands.
 
 ### Maintenance
 
 Pleroma maintenance is usually done with mix tasks.<br/>
-You can run these tasks in your running pleroma server using `./pleroma.sh mix [task] [arguments...]`.<br/>
-For example: `./pleroma.sh mix pleroma.user new sn0w ...`<br/>
-If you need to fix bigger problems you can also spawn a shell with `./pleroma.sh enter`.
+You can run these tasks in your running pleroma server using `./manage.sh mix [task] [arguments...]`.<br/>
+For example: `./manage.sh mix pleroma.user new sn0w ...`<br/>
+If you need to fix bigger problems you can also spawn a shell with `./manage.sh enter`.
 
 ### Postgres Upgrades
 
@@ -118,7 +118,7 @@ For example: A custom thumbnail now goes into `custom.d/` + `instance/static/ins
 ### Patches
 
 Works exactly like customization, but we have a neat little helper here.<br/>
-Use `./pleroma.sh mod [regex]` to mod any file that ships with pleroma, without having to type the complete path.
+Use `./manage.sh mod [regex]` to mod any file that ships with pleroma, without having to type the complete path.
 
 ### My instance is up, how do I reach it?
 

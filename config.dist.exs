@@ -55,7 +55,7 @@ config :pleroma, Pleroma.Web.Endpoint,
 # Uncomment/Change what you need, or delete it all.
 #
 # Want to use pleroma's config generator instead?
-# Try `./pleroma.sh mix pleroma.instance gen` and then `./pleroma.sh cp /home/pleroma/pleroma/config/generated_config.exs config.exs`.
+# Try `./manage.sh mix pleroma.instance gen` and then `./manage.sh cp /home/pleroma/pleroma/config/generated_config.exs config.exs`.
 #
 # Need some inspiration?
 # Take a look at https://git.pleroma.social/pleroma/pleroma/tree/develop/config
