@@ -371,7 +371,9 @@ fi
 
 # Fail if mandatory files are missing
 require_file ".env" ".env.dist"
-require_file "config.exs" "config.dist.exs"
+# No longer required
+#require_file "config.exs" "config.dist.exs"
+require_file "config.docker.exs"
 throw_file_errors
 
 # Parse .env

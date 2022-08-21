@@ -25,15 +25,25 @@ fi
 log "Syncing changes and patches..."
 rsync -av /custom.d/ /home/akkoma/akkoma/
 
-log "Recompiling..."
-mix compile
-
-log "Waiting for postgres..."
-while ! pg_isready -U akkoma -d postgres://db:5432/akkoma -t 1; do
-    sleep 1s
-done
-
 log "Performing sanity checks..."
+if ! touch /config.d/.sanity-check; then
+    log "\
+The config.d dir is NOT writable by `id -u`:`id -g`!\n\
+Without this the server will not able to start.\n\
+Please fix the permissions and try again.\
+    "
+    exit 1
+fi
+rm /config.d/.sanity-check
+if ! touch /secrets/.sanity-check; then
+    log "\
+The secrets datadir is NOT writable by `id -u`:`id -g`!\n\
+Without this the server will not able to start.\n\
+Please fix the permissions and try again.\
+    "
+    exit 1
+fi
+rm /secrets/.sanity-check
 if ! touch /uploads/.sanity-check; then
     log "\
 The uploads datadir is NOT writable by `id -u`:`id -g`!\n\
@@ -52,6 +62,15 @@ Please fix the permissions and try again.\
     exit 1
 fi
 rm /home/akkoma/akkoma/instance/static/frontends/.sanity-check
+
+
+log "Recompiling..."
+mix compile
+
+log "Waiting for postgres..."
+while ! pg_isready -U akkoma -d postgres://db:5432/akkoma -t 1; do
+    sleep 1s
+done
 
 log "Migrating database..."
 mix ecto.migrate

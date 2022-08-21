@@ -44,9 +44,11 @@ services:
     ]
     volumes:
       - ./custom.d:/custom.d:ro
-      - ./config.exs:/home/akkoma/akkoma/config/prod.secret.exs:ro
-      - ./config.exs:/home/akkoma/akkoma/config/dev.secret.exs:ro
+      - ./config.docker.exs:/home/akkoma/akkoma/config/prod.secret.exs:ro
+      - ./config.docker.exs:/home/akkoma/akkoma/config/dev.secret.exs:ro
       - ./emoji:/home/akkoma/akkoma/instance/static/emoji
-      - $DOCKER_DATADIR/uploads:/uploads
+      - ./config.d:/config.d
+      - $DOCKER_DATADIR/akkoma/uploads:/uploads
+      - $DOCKER_DATADIR/akkoma/secrets:/secrets
       # Uncomment for custom frontends
       #- $DOCKER_DATADIR/frontends:/home/akkoma/akkoma/instance/static/frontends

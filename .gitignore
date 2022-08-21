@@ -3,6 +3,8 @@ cache/
 emoji/
 custom.d/
 !custom.d/.gitkeep
+config.d/
+!config.d/.gitkeep
 config.exs
 secret.exs
 .env
