@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:13-alpine
+    init: true
+    restart: unless-stopped
+    environment: {
+      # This might seem insecure but is usually not a problem.
+      # You should leave this at the "pleroma" default.
+      # The DB is only reachable by containers in the same docker network,
+      # and is not exposed to the open internet.
+      #
+      # If you do change this, remember to update "config.exs".
+      POSTGRES_DB: pleroma,
+      POSTGRES_USER: pleroma,
+      POSTGRES_PASSWORD: pleroma,
+    }
+    volumes:
+      - $DOCKER_DATADIR/db:/var/lib/postgresql/data
+      - ./initdb.sql:/docker-entrypoint-initdb.d/pleroma.sql
+
+  server:
+    build: .
+    init: true
+    restart: unless-stopped
+    links:
+      - db
+    ports: [
+      # Uncomment/Change port mappings below as needed.
+      # The left side is your host machine, the right one is the pleroma container.
+      # You can prefix the left side with an ip.
+
+      # Webserver (for reverse-proxies outside of docker)
+      # If you use a dockerized proxy (see README), you can leave this commented
+      # and use a container link instead.
+      # "127.0.0.1:4000:4000",
+
+      # SSH support
+      # "2222:2222",
+
+      # Gopher support
+      # "9999:9999",
+    ]
+    volumes:
+      - ./custom.d:/custom.d:ro
+      - ./config.exs:/home/pleroma/pleroma/config/prod.secret.exs:ro
+      - ./config.exs:/home/pleroma/pleroma/config/dev.secret.exs:ro
+      - ./emoji:/home/pleroma/pleroma/instance/static/emoji
+      - $DOCKER_DATADIR/uploads:/uploads
