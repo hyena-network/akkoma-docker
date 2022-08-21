@@ -6,14 +6,14 @@ set -Eeo pipefail
 # Globals                                               #
 #########################################################
 
-readonly GITLAB_URI="https://git.pleroma.social"
-readonly PREFIX_API="api/v4/projects/pleroma%2Fpleroma/repository"
-readonly ENDPOINT_REPO="pleroma/pleroma.git"
-readonly ENDPOINT_FILE="pleroma/pleroma/raw"
-readonly ENDPOINT_LIST="pleroma/pleroma/files"
-readonly ENDPOINT_TAG="$PREFIX_API/tags"
-readonly ENDPOINT_BLOB="$PREFIX_API/blobs"
-readonly ENDPOINT_BRANCH="$PREFIX_API/branches"
+# readonly GITLAB_URI="https://git.pleroma.social"
+# readonly PREFIX_API="api/v4/projects/pleroma%2Fpleroma/repository"
+# readonly ENDPOINT_REPO="pleroma/pleroma.git"
+# readonly ENDPOINT_FILE="pleroma/pleroma/raw"
+# readonly ENDPOINT_LIST="pleroma/pleroma/files"
+# readonly ENDPOINT_TAG="$PREFIX_API/tags"
+# readonly ENDPOINT_BLOB="$PREFIX_API/blobs"
+# readonly ENDPOINT_BRANCH="$PREFIX_API/branches"
 
 #########################################################
 # Helpers                                               #
@@ -100,7 +100,7 @@ action__build() {
     if [[ -z "$cacheTag" ]] && has_command git && has_command grep && has_command awk; then
         set +o pipefail
         local resolvedHash
-        resolvedHash="$(git ls-remote $PLEROMA_GIT_REPO | grep "/$PLEROMA_VERSION" | awk '{ print $1 }')"
+        resolvedHash="$(git ls-remote $AKKOMA_GIT_REPO | grep "/$AKKOMA_VERSION" | awk '{ print $1 }')"
         set -o pipefail
 
         if [[ -n "$resolvedHash" ]]; then
@@ -168,7 +168,7 @@ action__build() {
         cacheTag="broken-host-env"
     fi
 
-    echo -e "#> (Re-)Building pleroma @$PLEROMA_VERSION with cache tag \`${cacheTag}\`...\n"
+    echo -e "#> (Re-)Building akomma @$AKKOMA_VERSION with cache tag \`${cacheTag}\`...\n"
     sleep 1
 
     docker_compose build \
@@ -179,7 +179,7 @@ action__build() {
 }
 
 action__enter() {
-    docker_compose exec server sh -c 'cd ~/pleroma && ash'
+    docker_compose exec server sh -c 'cd ~/akomma && ash'
 }
 
 action__logs() {
@@ -187,7 +187,7 @@ action__logs() {
 }
 
 action__mix() {
-    docker_compose exec server sh -c "cd ~/pleroma && mix $*"
+    docker_compose exec server sh -c "cd ~/akomma && mix $*"
 }
 
 action__restart() {
@@ -228,43 +228,47 @@ action__ps() {
     action__status
 }
 
-action__mod() {
-    require_command dialog
-    require_command jq
-    require_command curl
+### DISABLED FOR THIS SETUP
+# For Akkoma, I am not sure how this works yet seeing they don't use GitLab for their git hosting
+# That and I have no idea how this function works lol
 
-    if [[ ! -d ./debug.d ]]; then
-        mkdir ./debug.d
-    fi
+# action__mod() {
+#     require_command dialog
+#     require_command jq
+#     require_command curl
 
-    if [[ ! -f ./debug.d/mod_files.json ]] || [[ -n "$(find ./debug.d/mod_files.json -mmin +5)" ]]; then
-        curl -sSL -# "$GITLAB_URI/$ENDPOINT_LIST/$PLEROMA_VERSION?format=json" > ./debug.d/mod_files.json
+#     if [[ ! -d ./debug.d ]]; then
+#         mkdir ./debug.d
+#     fi
 
-        if [[ -f ./debug.d/mod_files.lst ]]; then
-            rm ./debug.d/mod_files.lst
-        fi
+#     if [[ ! -f ./debug.d/mod_files.json ]] || [[ -n "$(find ./debug.d/mod_files.json -mmin +5)" ]]; then
+#         curl -sSL -# "$GITLAB_URI/$ENDPOINT_LIST/$AKKOMA_VERSION?format=json" > ./debug.d/mod_files.json
 
-        jq -r 'map("\(.)\n") | add' <./debug.d/mod_files.json >./debug.d/mod_files.lst
-    fi
+#         if [[ -f ./debug.d/mod_files.lst ]]; then
+#             rm ./debug.d/mod_files.lst
+#         fi
 
-    if [[ -f ./debug.d/mod_files.lst ]] && [[ -r ./debug.d/mod_files.lst ]]; then
-        choices=""
+#         jq -r 'map("\(.)\n") | add' <./debug.d/mod_files.json >./debug.d/mod_files.lst
+#     fi
 
-        while read -r candidate; do
-            choices="$choices $candidate $(echo "$candidate" | rev | cut -d/ -f1 | rev)"
-        done <<< "$(grep -E ".*$1.*" <./debug.d/mod_files.lst)"
+#     if [[ -f ./debug.d/mod_files.lst ]] && [[ -r ./debug.d/mod_files.lst ]]; then
+#         choices=""
 
-        res=$(mktemp)
-        dialog --menu "Select the file you want to modify:" 35 80 30 $choices 2>"$res"
-        choice=$(cat "$res")
+#         while read -r candidate; do
+#             choices="$choices $candidate $(echo "$candidate" | rev | cut -d/ -f1 | rev)"
+#         done <<< "$(grep -E ".*$1.*" <./debug.d/mod_files.lst)"
 
-        install -D <(echo '') "./custom.d/$choice"
-        curl -sSL -# "$GITLAB_URI/$ENDPOINT_FILE/$PLEROMA_VERSION/$choice" > "./custom.d/$choice"
-    else
-        install -D <(echo '') "./custom.d/$1"
-        curl -sSL -# "$GITLAB_URI/$ENDPOINT_FILE/$PLEROMA_VERSION/$1" > "./custom.d/$1"
-    fi
-}
+#         res=$(mktemp)
+#         dialog --menu "Select the file you want to modify:" 35 80 30 $choices 2>"$res"
+#         choice=$(cat "$res")
+
+#         install -D <(echo '') "./custom.d/$choice"
+#         curl -sSL -# "$GITLAB_URI/$ENDPOINT_FILE/$AKKOMA_VERSION/$choice" > "./custom.d/$choice"
+#     else
+#         install -D <(echo '') "./custom.d/$1"
+#         curl -sSL -# "$GITLAB_URI/$ENDPOINT_FILE/$AKKOMA_VERSION/$1" > "./custom.d/$1"
+#     fi
+# }
 
 action__cp() {
     container="$(docker_compose ps -q server)"
@@ -279,13 +283,13 @@ action__cp() {
 
 print_help() {
     echo "
-Pleroma Maintenance Script
+Akomma Maintenance Script
 
 Usage:
     $0 [action] [action-args...]
 
 Actions:
-    build                        (Re)build the pleroma container.
+    build                        (Re)build the akomma container.
 
     enter                        Spawn a shell inside the container for debugging/maintenance.
 
@@ -293,18 +297,19 @@ Actions:
 
     mix [task] [args...]         Run a mix task without entering the container.
 
-    mod [file]                   Creates the file in custom.d and downloads the content from pleroma.social.
-                                 The download respects your \$PLEROMA_VERSION from .env.
+    mod [file]                   Creates the file in custom.d and downloads the content from akomma.dev.
+                                 The download respects your \$AKKOMA_VERSION from .env.
+                                 (CURRENTLY BROKEN!)
 
     restart                      Executes #stop and #start respectively.
 
-    start / up                   Start pleroma and sibling services.
+    start / up                   Start akomma and sibling services.
 
-    stop / down                  Stop pleroma and sibling services.
+    stop / down                  Stop akomma and sibling services.
 
     status / ps                  Show the current container status.
 
-    copy / cp [source] [target]  Copy a file from your pc to the pleroma container.
+    copy / cp [source] [target]  Copy a file from your pc to the akomma container.
                                  This operation only works in one direction.
                                  For making permanent changes to the container use custom.d.
 
@@ -312,6 +317,9 @@ Actions:
 
     You can report bugs or contribute to this project at:
         https://memleak.eu/sn0w/pleroma-docker
+
+    or specificly for this Akkoma downstream, at:
+        https://github.com/hyena-network/akkoma-docker
 "
 }
 

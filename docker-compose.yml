@@ -7,18 +7,18 @@ services:
     restart: unless-stopped
     environment: {
       # This might seem insecure but is usually not a problem.
-      # You should leave this at the "pleroma" default.
+      # You should leave this at the "akkomma" default.
       # The DB is only reachable by containers in the same docker network,
       # and is not exposed to the open internet.
       #
       # If you do change this, remember to update "config.exs".
-      POSTGRES_DB: pleroma,
-      POSTGRES_USER: pleroma,
-      POSTGRES_PASSWORD: pleroma,
+      POSTGRES_DB: akkomma,
+      POSTGRES_USER: akkomma,
+      POSTGRES_PASSWORD: akkomma,
     }
     volumes:
       - $DOCKER_DATADIR/db:/var/lib/postgresql/data
-      - ./initdb.sql:/docker-entrypoint-initdb.d/pleroma.sql
+      - ./initdb.sql:/docker-entrypoint-initdb.d/akkomma.sql
 
   server:
     build: .
@@ -28,7 +28,7 @@ services:
       - db
     ports: [
       # Uncomment/Change port mappings below as needed.
-      # The left side is your host machine, the right one is the pleroma container.
+      # The left side is your host machine, the right one is the akkomma container.
       # You can prefix the left side with an ip.
 
       # Webserver (for reverse-proxies outside of docker)
@@ -44,7 +44,7 @@ services:
     ]
     volumes:
       - ./custom.d:/custom.d:ro
-      - ./config.exs:/home/pleroma/pleroma/config/prod.secret.exs:ro
-      - ./config.exs:/home/pleroma/pleroma/config/dev.secret.exs:ro
-      - ./emoji:/home/pleroma/pleroma/instance/static/emoji
+      - ./config.exs:/home/akkomma/akkomma/config/prod.secret.exs:ro
+      - ./config.exs:/home/akkomma/akkomma/config/dev.secret.exs:ro
+      - ./emoji:/home/akkomma/akkomma/instance/static/emoji
       - $DOCKER_DATADIR/uploads:/uploads

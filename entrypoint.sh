@@ -23,13 +23,13 @@ if [ -n "$BUILDTIME" ]; then
 fi
 
 log "Syncing changes and patches..."
-rsync -av /custom.d/ /home/pleroma/pleroma/
+rsync -av /custom.d/ /home/akkomma/akkomma/
 
 log "Recompiling..."
 mix compile
 
 log "Waiting for postgres..."
-while ! pg_isready -U pleroma -d postgres://db:5432/pleroma -t 1; do
+while ! pg_isready -U akkomma -d postgres://db:5432/akkomma -t 1; do
     sleep 1s
 done
 

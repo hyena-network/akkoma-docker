@@ -7,11 +7,26 @@ RUN \
         exit 1; \
     fi
 
+#Setup labels
+ARG BUILD_DATE
+ARG VCS_REF
+
+LABEL maintainer="mel@hyena.network" \
+    org.opencontainers.image.title="sochynet" \
+    org.opencontainers.image.description="Akkoma (HyNET Install)" \
+    org.opencontainers.image.authors="mel@hyena.network" \
+    org.opencontainers.image.vendor="soc.hyena.network" \
+    org.opencontainers.image.documentation="https://docs.akkoma.dev/stable" \
+    org.opencontainers.image.licenses="AGPL-3.0" \
+    org.opencontainers.image.url="https://akkoma.dev" \
+    org.opencontainers.image.revision=$VCS_REF \
+    org.opencontainers.image.created=$BUILD_DATE
+
 # Set up environment
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ARG MIX_ENV
-ENV MIX_ENV=$MIX_ENV
+ENV MIX_ENV=$MIX_ENV-hynet
 
 # Prepare mounts
 VOLUME /custom.d /uploads
@@ -40,29 +55,29 @@ ENTRYPOINT ["/entrypoint.sh"]
 ARG DOCKER_UID
 ARG DOCKER_GID
 RUN \
-    echo "#> Pleroma user will be ${DOCKER_UID}:${DOCKER_GID}" 1>&2 && \
-    addgroup -g ${DOCKER_GID} pleroma && \
-    adduser -S -s /bin/ash -G pleroma -u ${DOCKER_UID} pleroma && \
+    echo "#> Akkomma user will be ${DOCKER_UID}:${DOCKER_GID}" 1>&2 && \
+    addgroup -g ${DOCKER_GID} akkomma && \
+    adduser -S -s /bin/ash -G akkomma -u ${DOCKER_UID} akkomma && \
     mkdir -p /custom.d /uploads && \
-    chown -R pleroma:pleroma /custom.d /uploads
+    chown -R akkomma:akkomma /custom.d /uploads
 
-USER pleroma
-WORKDIR /home/pleroma
+USER akkomma
+WORKDIR /home/akkomma
 
-# Get pleroma sources
+# Get akkomma sources
 #
 # Also make sure that instance/static/emoji exists.
-# Pleroma does not ship with an `instance` folder by default, causing docker to create `instance/static` for us at launch.
-# In itself that wouldn't be much of an issue, but said folder(s) are created as root:pleroma with 2755.
+# Akkomma does not ship with an `instance` folder by default, causing docker to create `instance/static` for us at launch.
+# In itself that wouldn't be much of an issue, but said folder(s) are created as root:akkomma with 2755.
 # This breaks the custom.d step in entrypoint.sh which relies on writing there (See #10).
 #
-ARG PLEROMA_GIT_REPO
+ARG AKKOMA_GIT_REPO
 RUN \
-    echo "#> Getting pleroma sources from $PLEROMA_GIT_REPO..." 1>&2 && \
-    git clone --progress $PLEROMA_GIT_REPO ./pleroma && \
-    mkdir -p ./pleroma/instance/static/emoji
+    echo "#> Getting akkomma sources from $AKKOMA_GIT_REPO..." 1>&2 && \
+    git clone --progress $AKKOMA_GIT_REPO ./akkomma && \
+    mkdir -p ./akkomma/instance/static/emoji
 
-WORKDIR /home/pleroma/pleroma
+WORKDIR /home/akkomma/akkomma
 
 # Bust the build cache (if needed)
 # This works by setting an environment variable with the last
@@ -72,11 +87,11 @@ ENV __CACHE_TAG $__CACHE_TAG
 
 # Fetch changes, checkout
 # Only pull if the version-string happens to be a branch
-ARG PLEROMA_VERSION
+ARG AKKOMA_VERSION
 RUN \
     git fetch --all && \
-    git checkout $PLEROMA_VERSION && \
-    if git show-ref --quiet "refs/heads/$PLEROMA_VERSION"; then \
+    git checkout $AKKOMA_VERSION && \
+    if git show-ref --quiet "refs/heads/$AKKOMA_VERSION"; then \
         git pull --rebase --autostash; \
     fi
 
