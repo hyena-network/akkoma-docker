@@ -168,7 +168,7 @@ action__build() {
         cacheTag="broken-host-env"
     fi
 
-    echo -e "#> (Re-)Building akomma @$AKKOMA_VERSION with cache tag \`${cacheTag}\`...\n"
+    echo -e "#> (Re-)Building akkoma @$AKKOMA_VERSION with cache tag \`${cacheTag}\`...\n"
     sleep 1
 
     docker_compose build \
@@ -179,7 +179,7 @@ action__build() {
 }
 
 action__enter() {
-    docker_compose exec server sh -c 'cd ~/akomma && ash'
+    docker_compose exec server sh -c 'cd ~/akkoma && ash'
 }
 
 action__logs() {
@@ -187,7 +187,7 @@ action__logs() {
 }
 
 action__mix() {
-    docker_compose exec server sh -c "cd ~/akomma && mix $*"
+    docker_compose exec server sh -c "cd ~/akkoma && mix $*"
 }
 
 action__restart() {
@@ -283,13 +283,13 @@ action__cp() {
 
 print_help() {
     echo "
-Akomma Maintenance Script
+akkoma Maintenance Script
 
 Usage:
     $0 [action] [action-args...]
 
 Actions:
-    build                        (Re)build the akomma container.
+    build                        (Re)build the akkoma container.
 
     enter                        Spawn a shell inside the container for debugging/maintenance.
 
@@ -297,19 +297,19 @@ Actions:
 
     mix [task] [args...]         Run a mix task without entering the container.
 
-    mod [file]                   Creates the file in custom.d and downloads the content from akomma.dev.
+    mod [file]                   Creates the file in custom.d and downloads the content from akkoma.dev.
                                  The download respects your \$AKKOMA_VERSION from .env.
                                  (CURRENTLY BROKEN!)
 
     restart                      Executes #stop and #start respectively.
 
-    start / up                   Start akomma and sibling services.
+    start / up                   Start akkoma and sibling services.
 
-    stop / down                  Stop akomma and sibling services.
+    stop / down                  Stop akkoma and sibling services.
 
     status / ps                  Show the current container status.
 
-    copy / cp [source] [target]  Copy a file from your pc to the akomma container.
+    copy / cp [source] [target]  Copy a file from your pc to the akkoma container.
                                  This operation only works in one direction.
                                  For making permanent changes to the container use custom.d.
 

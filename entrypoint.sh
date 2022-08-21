@@ -23,13 +23,13 @@ if [ -n "$BUILDTIME" ]; then
 fi
 
 log "Syncing changes and patches..."
-rsync -av /custom.d/ /home/akkomma/akkomma/
+rsync -av /custom.d/ /home/akkoma/akkoma/
 
 log "Recompiling..."
 mix compile
 
 log "Waiting for postgres..."
-while ! pg_isready -U akkomma -d postgres://db:5432/akkomma -t 1; do
+while ! pg_isready -U akkoma -d postgres://db:5432/akkoma -t 1; do
     sleep 1s
 done
 
@@ -43,6 +43,15 @@ Please fix the permissions and try again.\
     exit 1
 fi
 rm /uploads/.sanity-check
+if ! touch /home/akkoma/akkoma/instance/static/frontends/.sanity-check; then
+    log "\
+The frontends datadir is NOT writable by `id -u`:`id -g`!\n\
+This will break all frontend functionality.\n\
+Please fix the permissions and try again.\
+    "
+    exit 1
+fi
+rm /home/akkoma/akkoma/instance/static/frontends/.sanity-check
 
 log "Migrating database..."
 mix ecto.migrate
