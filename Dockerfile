@@ -26,7 +26,7 @@ LABEL maintainer="mel@hyena.network" \
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ARG MIX_ENV
-ENV MIX_ENV=$MIX_ENV-hynet
+ENV MIX_ENV=$MIX_ENV
 
 # Prepare mounts
 VOLUME /custom.d /uploads
