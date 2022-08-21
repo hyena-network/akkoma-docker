@@ -12,8 +12,8 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="mel@hyena.network" \
-    org.opencontainers.image.title="sochynet" \
-    org.opencontainers.image.description="Akkoma (HyNET Install)" \
+    org.opencontainers.image.title="Akkoma" \
+    org.opencontainers.image.description="Akkoma containerized" \
     org.opencontainers.image.authors="mel@hyena.network" \
     org.opencontainers.image.vendor="soc.hyena.network" \
     org.opencontainers.image.documentation="https://docs.akkoma.dev/stable" \
