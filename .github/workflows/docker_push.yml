@@ -37,6 +37,6 @@ jobs:
         with:
           context: .
           push: true
-          build-args: "__VIA_SCRIPT=1"
+          build-args: __VIA_SCRIPT=1,__CACHE_TAG=$(date '+%s')
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
