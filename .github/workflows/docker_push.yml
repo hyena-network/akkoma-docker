@@ -37,6 +37,6 @@ jobs:
         with:
           context: .
           push: true
-          build-args: __VIA_SCRIPT=1,__CACHE_TAG=$(date '+%s')
+          build-args: __VIA_SCRIPT=1,__CACHE_TAG=${{ github.event.repository.updated_at}}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
