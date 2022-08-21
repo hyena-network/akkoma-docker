@@ -55,29 +55,29 @@ ENTRYPOINT ["/entrypoint.sh"]
 ARG DOCKER_UID
 ARG DOCKER_GID
 RUN \
-    echo "#> Akkomma user will be ${DOCKER_UID}:${DOCKER_GID}" 1>&2 && \
-    addgroup -g ${DOCKER_GID} akkomma && \
-    adduser -S -s /bin/ash -G akkomma -u ${DOCKER_UID} akkomma && \
+    echo "#> akkoma user will be ${DOCKER_UID}:${DOCKER_GID}" 1>&2 && \
+    addgroup -g ${DOCKER_GID} akkoma && \
+    adduser -S -s /bin/ash -G akkoma -u ${DOCKER_UID} akkoma && \
     mkdir -p /custom.d /uploads && \
-    chown -R akkomma:akkomma /custom.d /uploads
+    chown -R akkoma:akkoma /custom.d /uploads
 
-USER akkomma
-WORKDIR /home/akkomma
+USER akkoma
+WORKDIR /home/akkoma
 
-# Get akkomma sources
+# Get akkoma sources
 #
 # Also make sure that instance/static/emoji exists.
-# Akkomma does not ship with an `instance` folder by default, causing docker to create `instance/static` for us at launch.
-# In itself that wouldn't be much of an issue, but said folder(s) are created as root:akkomma with 2755.
+# akkoma does not ship with an `instance` folder by default, causing docker to create `instance/static` for us at launch.
+# In itself that wouldn't be much of an issue, but said folder(s) are created as root:akkoma with 2755.
 # This breaks the custom.d step in entrypoint.sh which relies on writing there (See #10).
 #
 ARG AKKOMA_GIT_REPO
 RUN \
-    echo "#> Getting akkomma sources from $AKKOMA_GIT_REPO..." 1>&2 && \
-    git clone --progress $AKKOMA_GIT_REPO ./akkomma && \
-    mkdir -p ./akkomma/instance/static/emoji
+    echo "#> Getting akkoma sources from $AKKOMA_GIT_REPO..." 1>&2 && \
+    git clone --progress $AKKOMA_GIT_REPO ./akkoma && \
+    mkdir -p ./akkoma/instance/static/emoji
 
-WORKDIR /home/akkomma/akkomma
+WORKDIR /home/akkoma/akkoma
 
 # Bust the build cache (if needed)
 # This works by setting an environment variable with the last

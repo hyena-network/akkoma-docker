@@ -7,18 +7,18 @@ services:
     restart: unless-stopped
     environment: {
       # This might seem insecure but is usually not a problem.
-      # You should leave this at the "akkomma" default.
+      # You should leave this at the "akkoma" default.
       # The DB is only reachable by containers in the same docker network,
       # and is not exposed to the open internet.
       #
       # If you do change this, remember to update "config.exs".
-      POSTGRES_DB: akkomma,
-      POSTGRES_USER: akkomma,
-      POSTGRES_PASSWORD: akkomma,
+      POSTGRES_DB: akkoma,
+      POSTGRES_USER: akkoma,
+      POSTGRES_PASSWORD: akkoma,
     }
     volumes:
       - $DOCKER_DATADIR/db:/var/lib/postgresql/data
-      - ./initdb.sql:/docker-entrypoint-initdb.d/akkomma.sql
+      - ./initdb.sql:/docker-entrypoint-initdb.d/akkoma.sql
 
   server:
     build: .
@@ -28,13 +28,13 @@ services:
       - db
     ports: [
       # Uncomment/Change port mappings below as needed.
-      # The left side is your host machine, the right one is the akkomma container.
+      # The left side is your host machine, the right one is the akkoma container.
       # You can prefix the left side with an ip.
 
       # Webserver (for reverse-proxies outside of docker)
       # If you use a dockerized proxy (see README), you can leave this commented
       # and use a container link instead.
-      # "127.0.0.1:4000:4000",
+      "127.0.0.1:4000:4000",
 
       # SSH support
       # "2222:2222",
@@ -44,7 +44,7 @@ services:
     ]
     volumes:
       - ./custom.d:/custom.d:ro
-      - ./config.exs:/home/akkomma/akkomma/config/prod.secret.exs:ro
-      - ./config.exs:/home/akkomma/akkomma/config/dev.secret.exs:ro
-      - ./emoji:/home/akkomma/akkomma/instance/static/emoji
+      - ./config.exs:/home/akkoma/akkoma/config/prod.secret.exs:ro
+      - ./config.exs:/home/akkoma/akkoma/config/dev.secret.exs:ro
+      - ./emoji:/home/akkoma/akkoma/instance/static/emoji
       - $DOCKER_DATADIR/uploads:/uploads

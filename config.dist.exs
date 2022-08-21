@@ -22,9 +22,9 @@ config :esshd,
 # "db" is the default interlinked hostname.
 config :pleroma, Pleroma.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "pleroma",
-  password: "pleroma",
-  database: "pleroma",
+  username: "akkoma",
+  password: "akkoma",
+  database: "akkoma",
   hostname: "db"
 
 # You should not change this.
