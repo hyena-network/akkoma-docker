@@ -16,11 +16,11 @@ For other problems related to this script, contact me or open an issue :)
 - Bash 4+
 - Docker 18.06+ and docker-compose 1.22+
 
-### Installation
+### Quick-start
 
-- Clone this repository
-- Copy the base `.env.dist` to `.env` and change the desired values
-- Run `./manage.sh build` and `./manage.sh up`
+- Clone this repository (or just copy the [docker-compose.yml](../docker-compose.yml))
+- Copy the base [.env.dist](../.env.dist) to `.env` and change the desired values
+- Run `./manage.sh up` or `docker-compose up`
 - [Configure a reverse-proxy](#my-instance-is-up-how-do-i-reach-it)
 - Profit!
 
