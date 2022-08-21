@@ -6,6 +6,12 @@ This repository dockerizes it for easier deployment.
 
 This repository was heavily based on sn0w's work on [pleroma-docker](https://memleak.eu/sn0w/pleroma-docker)
 
+#### Differences:
+
+* Enviroment variable based configuration
+* Autogenerating secrets
+* Additional scripts
+
 <hr>
 
 ```cpp
@@ -30,9 +36,9 @@ This repository was heavily based on sn0w's work on [pleroma-docker](https://mem
 ## Docs
 
 These docs assume that you have at least a basic understanding
-of the pleroma installation process and common docker commands.
+of the akkoma installation process and common docker commands.
 
-If you have questions about Pleroma head over to https://docs.pleroma.social/.
+If you have questions about Pleroma head over to https://docs.akkoma.dev/stable/.
 For help with docker check out https://docs.docker.com/.
 
 For other problems related to this script, contact me or open an issue :)
@@ -59,14 +65,14 @@ The only command that you cannot use is `docker-compose build` due to build cach
 
 ### Configuration
 
-All the pleroma options that you usually put into your `*.secret.exs` now go into `config.exs`.<br/>
+All the akkoma options that you usually put into your `*.secret.exs` now go into `config.exs`.<br/>
 `.env` stores config values that need to be known at orchestration/build time.<br/>
 Documentation for the possible values is inside of that file.
 
 ### Updates
 
 Run `./manage.sh build` again and start the updated image with `./manage.sh up`.<br/>
-You don't need to stop your pleroma server for either of those commands.
+You don't need to stop your akkoma server for either of those commands.
 
 ### Frontends
 
@@ -88,7 +94,7 @@ From there on you should find a folder called `frontends` in your Docker data di
 ### Maintenance
 
 Pleroma maintenance is usually done with mix tasks.<br/>
-You can run these tasks in your running pleroma server using `./manage.sh mix [task] [arguments...]`.<br/>
+You can run these tasks in your running akkoma server using `./manage.sh mix [task] [arguments...]`.<br/>
 For example: `./manage.sh mix pleroma.user new sn0w ...`<br/>
 If you need to fix bigger problems you can also spawn a shell with `./manage.sh enter`.
 
@@ -100,15 +106,15 @@ If you ever wish to upgrade postgres to a new major release for some reason, her
 - Inform your users about the impending downtime
     - Seriously this can take anywhere from a couple hours to a week depending on your instance
 - Make sure you have enough free disk space or some network drive to dump to, we can't do in-place upgrades
-- Stop pleroma (`docker-compose stop server`)
-- Dump the current database into an SQL file (`docker-compose exec db pg_dumpall -U pleroma > /my/sql/location/pleroma.sql`)
+- Stop akkoma (`docker-compose stop server`)
+- Dump the current database into an SQL file (`docker-compose exec db pg_dumpall -U akkoma > /my/sql/location/akkoma.sql`)
 - Remove the old containers (`docker-compose down`)
 - Modify the postgres version in `docker-compose.yml` to your desired release
 - Delete `data/db` or move it into some different place (might be handy if you want to abort/revert the migration)
 - Start the new postgres container (`docker-compose up -d db`)
-- Start the import (`docker-compose exec -T db psql -U pleroma < /my/sql/location/pleroma.sql`)
+- Start the import (`docker-compose exec -T db psql -U akkoma < /my/sql/location/akkoma.sql`)
 - Wait for a possibly ridculously long time
-- Boot pleroma again (`docker-compose up -d`)
+- Boot akkoma again (`docker-compose up -d`)
 - Wait for service to stabilize while federation catches up
 - Done!
 
@@ -116,17 +122,19 @@ If you ever wish to upgrade postgres to a new major release for some reason, her
 
 Add your customizations (and their folder structure) to `custom.d/`.<br/>
 They will be copied into the right place when the container starts.<br/>
-You can even replace/patch pleroma’s code with this, because the project is recompiled at startup if needed.
+You can even replace/patch akkoma’s code with this, because the project is recompiled at startup if needed.
 
-In general: Prepending `custom.d/` to pleroma’s customization guides should work all the time.<br/>
-Check them out in the [pleroma documentation](https://docs.pleroma.social/small_customizations.html#content).
+In general: Prepending `custom.d/` to akkoma’s customization guides should work all the time.<br/>
+Check them out in the [akkoma documentation](https://docs.akkoma.dev/stable/small_customizations.html#content).
 
 For example: A custom thumbnail now goes into `custom.d/` + `instance/static/instance/thumbnail.jpeg`.
 
 ### Patches
 
-Works exactly like customization, but we have a neat little helper here.<br/>
-Use `./manage.sh mod [regex]` to mod any file that ships with pleroma, without having to type the complete path.
+** THIS DOES NOT WORK AT THE MOMENT, unlike Pleroma, Akkoma is not hosted on gitlab so the same API is not in place **
+
+~~Works exactly like customization, but we have a neat little helper here.<br/>~~
+~~Use `./manage.sh mod [regex]` to mod any file that ships with akkoma, without having to type the complete path.~~
 
 ### My instance is up, how do I reach it?
 
@@ -134,7 +142,7 @@ To reach Gopher or SSH, just uncomment the port-forward in your `docker-compose.
 
 To reach HTTP you will have to configure a "reverse-proxy".<br/>
 Older versions of this project contained a huge amount of scripting to support all kinds of reverse-proxy setups.<br/>
-This newer version tries to focus only on providing good pleroma tooling.<br/>
+This newer version tries to focus only on providing good akkoma tooling.<br/>
 That makes the whole process a bit more manual, but also more flexible.
 
 You can use Caddy, Traefik, Apache, nginx, or whatever else you come up with.<br/>
@@ -166,13 +174,6 @@ This will work automagically when the proxy also lives inside of docker.
 
 If you need help with this, or if you think that this needs more documentation, please let me know.
 
-Something that cofe.rocks uses is simple port-forwarding of the `server` container to the host's `127.0.0.1`.<br/>
-From there on, the natively installed nginx server acts as a proxy to the open internet.<br/>
-You can take a look at cofe's [compose yaml](/hosted/pleroma/src/branch/master/docker-compose.yml) and [proxy config](/hosted/pleroma/src/branch/master/proxy.xconf) if that setup sounds interesting.
-
 ### Attribution
 
-Thanks to [Angristan](https://github.com/Angristan/dockerfiles/tree/master/pleroma) and [RX14](https://github.com/RX14/kurisu.rx14.co.uk/blob/master/services/iscute.moe/pleroma/Dockerfile) for their dockerfiles, which served as an inspiration for the early versions of this script.
-
-The current version is based on the [offical install instructions](https://docs.pleroma.social/alpine_linux_en.html).
-Thanks to all people who contributed to those.
+Great thanks to sn0w for publishing their [pleroma-docker](https://memleak.eu/sn0w/pleroma-docker) repository on what this is based on.
