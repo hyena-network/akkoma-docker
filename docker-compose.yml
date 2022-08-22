@@ -54,4 +54,4 @@ services:
       - $DOCKER_DATADIR/akkoma/uploads:/uploads
       - $DOCKER_DATADIR/akkoma/secrets:/secrets
       # Uncomment for custom frontends
-      #- $DOCKER_DATADIR/frontends:/home/akkoma/akkoma/instance/static/frontends
+      #- $DOCKER_DATADIR/akkoma/frontends:/home/akkoma/akkoma/instance/static/frontends
