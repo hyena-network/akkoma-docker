@@ -20,6 +20,7 @@ For other problems related to this script, contact me or open an issue :)
 
 - Clone this repository (or just copy the [docker-compose.yml](../docker-compose.yml))
 - Copy the base [.env.dist](../.env.dist) to `.env` and change the desired values
+- Run `./manage.sh build` to build the Akkoma container
 - Run `./manage.sh up` or `docker-compose up`
 - [Configure a reverse-proxy](#my-instance-is-up-how-do-i-reach-it)
 - Profit!
