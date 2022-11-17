@@ -18,7 +18,7 @@ services:
     }
     volumes:
       - $DOCKER_DATADIR/db:/var/lib/postgresql/data
-      - ./initdb.sql:/docker-entrypoint-initdb.d/akkoma.sql
+      - ./docker/initdb.sql:/docker-entrypoint-initdb.d/akkoma.sql
 
   server:
     build: docker/
