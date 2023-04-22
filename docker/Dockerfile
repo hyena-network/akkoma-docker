@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.17
 
 ARG __VIA_SCRIPT
 RUN \
@@ -113,4 +113,4 @@ HEALTHCHECK \
     --start-period=50s \
     --timeout=4s \
     --retries=3 \
-    CMD curl -sSLf http://localhost:4000/api/pleroma/healthcheck || exit 1
+    CMD curl -sSLf http://localhost:4000/api/v1/pleroma/healthcheck || exit 1
